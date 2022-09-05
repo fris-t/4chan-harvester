@@ -22,7 +22,7 @@ from sqlalchemy import update
 ### OPEN DATABASE CONNECTION
 ############################
 
-engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost')
+engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost')
 #engine.execute("CREATE DATABASE fourchan") 
 ############################
 ### CREATING FUNCTIONS
@@ -41,7 +41,7 @@ def startpoint():
 
     try:
         #sql connection
-        engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost/fourchan')
+        engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost/fourchan')
         active_threads.to_sql(name='actives', con=engine, index=False, if_exists='replace')
         print("database filled")
     except:
@@ -59,7 +59,7 @@ def newbatch():
     print(newbatch_1)
 
     try:
-        engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost:3306/fourchan')
+        engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost:3306/fourchan')
         newbatch_1.to_sql(name='newbatch',
         con=engine,
         index=False,
@@ -76,7 +76,7 @@ def archive_threads(thread_number):
     db=mysql.connector.connect(
         host="localhost", 
         user='root',
-        passwd='mysqlpass',
+        passwd='[YOURPASS]',
         database='fourchan'
     )
     #cursor
@@ -90,7 +90,7 @@ print("archive threads function created")
 def protocol():
 
     #load in data
-    engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost:3306/fourchan')
+    engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost:3306/fourchan')
     actives = pd.read_sql_table("actives", engine)
     print("current active " + str(len(actives)))
     news= pd.read_sql_table("newbatch", engine)
@@ -126,7 +126,7 @@ def protocol():
                 replycrawler(i, newreplies)
 
                 ###HIER PROBLEEM!!! --> aantal posts in de actives database moet worden ge-update
-                engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost:3306/fourchan')
+                engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost:3306/fourchan')
                 stmnt= "UPDATE actives SET replies = " + str(int(thread_in_news['replies'])) + " WHERE no = " + str(i)
                 #print(stmnt)
                 engine.execute(stmnt) 
@@ -241,7 +241,7 @@ def threadcrawler(someinput):
         table_name= 'thread_' + str(thread_no) 
         #columnnames= "(threadno INTEGER(15), thread_subject INTEGER(15), nr_replies INTEGER(10), replyno INTEGER(15), unix_date INTEGER(15), real_date VARCHAR(32), geo_id VARCHAR(32), flag_id VARCHAR(32), screen_name VARCHAR(50),  poster_id VARCHAR(50),  image_url VARCHAR(250),  quoting VARCHAR(750),  post_text VARCHAR(1550), urls VARCHAR(1550))"
         #newsqltable(table_name, columnnames)
-        engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost:3306/fourchan')
+        engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost:3306/fourchan')
         try:
             thread_dataframe.to_sql(name=table_name,
             con=engine,
@@ -343,7 +343,7 @@ def threadcrawler(someinput):
                 "urls":str(urls)}
                 len(replydata)
                 reply_dataframe=pd.DataFrame([replydata])
-                engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost:3306/fourchan')
+                engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost:3306/fourchan')
                 reply_dataframe.to_sql(name=table_name, con=engine, index=False, if_exists='append')
             print("table for thread " + str(thread_no) + " updated")
     except:
@@ -466,7 +466,7 @@ def replycrawler(someinput, number_of_new_replies):
             "urls":str(urls)}
             table_name= 'thread_' + str(thread_no) 
             reply_dataframe=pd.DataFrame([replydata])
-            engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost:3306/fourchan')
+            engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost:3306/fourchan')
             reply_dataframe.to_sql(name=table_name, con=engine, index=False, if_exists='append')
         print("table for thread " + str(thread_no) + " updated")
     except:
@@ -480,7 +480,7 @@ print("The replycrawler function created")
 
 print(" #### starting scraping ####")
 startpoint()
-engine= sqlalchemy.create_engine('mysql+pymysql://root:mysqlpass@localhost/fourchan')
+engine= sqlalchemy.create_engine('mysql+pymysql://root:[YOURPASS]@localhost/fourchan')
 actives = pd.read_sql_table("actives", engine)
 activesno = actives['no']
 for i in list(activesno):
